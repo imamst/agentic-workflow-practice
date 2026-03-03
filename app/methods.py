@@ -7,7 +7,7 @@ def generate_queries(topic: str) -> QueriesSchema:
         model="google/gemini-3-flash-preview",
         messages=[
             {"role": "system", "content": "You are a helpful assistant that generates sets of queries to search the web."},
-            {"role": "user", "content": f"Generate 3 queries to search the web for the topic: {topic}"}
+            {"role": "user", "content": f"Generate 2 queries to search the web for the topic: {topic}"}
         ],
         response_format=QueriesSchema
     ) 
@@ -25,6 +25,18 @@ def search_web(query: str) -> str:
         messages=[
             {"role": "system", "content": "You are a helpful assistant that summarizes the results of a web search."},
             {"role": "user", "content": f"Summarize the results of the following web search: {json.dumps(results)}"}
+        ],
+        extra_body={"reasoning": {"enabled": True}}
+    )
+
+    return response.choices[0].message.content # type: ignore
+
+def generate_report(topic: str, research_context: str) -> str:
+    response = oa_client.chat.completions.parse(
+        model="deepseek/deepseek-v3.2-exp",
+        messages=[
+            {"role": "system", "content": f"Create a reaserch report based on the research context provided. Context: {research_context}"},
+            {"role": "user", "content": f"Topic: {topic}"}
         ],
         extra_body={"reasoning": {"enabled": True}}
     )
