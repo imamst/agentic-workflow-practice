@@ -1,16 +1,9 @@
-# Simple Deep Research
-# -> User Input a Topic
-# -> Generate sets of queries to search the web
-# -> Execute the queries and collect the results
-# -> Summarize the results
-# -> Generate a report of the results
 from weasyprint import HTML
 from markdown import markdown
+from app.modules.research.methods import generate_queries, generate_report, search_web
 
-from app.modules.research.methods import generate_queries, search_web, generate_report
 
-
-def main():
+def research():
     queries = generate_queries(topic="Mobile Legends Bang Bang Draft Picks Strategy")
 
     research_context = ""
@@ -27,7 +20,5 @@ def main():
     HTML(string=result).write_pdf("output.pdf")
 
 
-if (
-    __name__ == "__main__"
-):  # to prevent the code from being executed when the module is imported
-    main()
+def research_task():
+    research()
