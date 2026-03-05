@@ -4,6 +4,8 @@ from dotenv import load_dotenv
 from app.modules.research.schema import ResearchInput
 from scalar_fastapi import get_scalar_api_reference
 
+from app.modules.research.tasks import research_task
+
 load_dotenv()
 
 app = FastAPI()
@@ -11,7 +13,7 @@ app = FastAPI()
 
 @app.post("/research")
 def do_research(body: ResearchInput):
-    return {}
+    research_task.delay(strategy=body.strategy)
 
 
 @app.get("/scalar")

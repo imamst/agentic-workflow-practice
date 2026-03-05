@@ -1,9 +1,10 @@
+from app.celery_app import celery_app
 from weasyprint import HTML
 from markdown import markdown
 from app.modules.research.methods import generate_queries, generate_report, search_web
 
 
-def research():
+def research(strategy: str):
     queries = generate_queries(topic="Mobile Legends Bang Bang Draft Picks Strategy")
 
     research_context = ""
@@ -13,12 +14,13 @@ def research():
         research_context += f"Query: {query}\nResults: {results}\n\n"
 
     research_result = generate_report(
-        strategy="Pick off", research_context=research_context
+        strategy=strategy, research_context=research_context
     )
 
     result = markdown(text=research_result, output_format="html")
     HTML(string=result).write_pdf("output.pdf")
 
 
-def research_task():
-    research()
+@celery_app.task
+def research_task(strategy: str):
+    research(strategy=strategy)

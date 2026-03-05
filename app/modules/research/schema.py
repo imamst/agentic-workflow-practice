@@ -8,4 +8,4 @@ class QueriesSchema(BaseModel):
 
 
 class ResearchInput(BaseModel):
-    topic: str = Field(description="The topic of the research")
+    strategy: str = Field(description="The MLBB draft strategy to research")
